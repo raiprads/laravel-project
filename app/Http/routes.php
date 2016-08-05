@@ -11,10 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+Route::get('/', 'HelsinkiEventsController@welcome');
 
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+
+// Route::get('api/user', ['middleware' => 'auth.basic.once', function() {
+//     // Only authenticated users may enter...
+// }]);
