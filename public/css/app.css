@@ -1,0 +1,26 @@
+body {
+  font-family: "Cabin";
+  /* test bg*/
+  background: #f5ffa6;
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, #f5ffa6), color-stop(12%, #f5ffa6), color-stop(34%, #a1e4f5), color-stop(67%, #8ef59a), color-stop(100%, #db4fbf));
+  background: linear-gradient(to bottom, #f5ffa6 0%, #f5ffa6 12%, #a1e4f5 34%, #8ef59a 67%, #db4fbf 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5ffa6', endColorstr='#db4fbf', GradientType=0 ); }
+
+.fa-btn {
+  margin-right: 6px; }
+
+.event-item {
+  min-height: 420px;
+  background-color: #ffffff;
+  margin-bottom: 25px; }
+
+.event-item:nth-child(3n+1) {
+  clear: left; }
+
+.event-item-image {
+  margin-top: 25px; }
+
+h1, h2, h3 {
+  text-transform: uppercase; }
+
+/*# sourceMappingURL=app.css.map */

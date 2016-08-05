@@ -13,9 +13,12 @@ class HelsinkiEventsController extends Controller
 	
 	protected $eventsResponse;
 	protected $eventsClientUrl;
+	protected $eventsDateRange;
 
 	public function __construct(HelsinkiEvents $helsinkiEvents)
 	{
+		$this->eventsDateRange = $helsinkiEvents->setDateParams("+1 month");
+		
 		$this->eventsClientUrl = $helsinkiEvents->returnClientEventsUrl();
 	}
 
@@ -23,7 +26,7 @@ class HelsinkiEventsController extends Controller
 	{
 		$eventsClient = new Client($this->eventsClientUrl);
 
-		return $eventsClient->request('GET', '?format=json');
+		return $eventsClient->request('GET', '?format=json'.$this->eventsDateRange);
 	}
 
 	public function getEventsContent()
@@ -48,7 +51,7 @@ class HelsinkiEventsController extends Controller
 
 		$events = $this->getEventsContent();
 
-		return view('welcome', compact('events'));
+		return view('events.index', compact('events'));
 	}
 
 }

@@ -1,2 +1,43 @@
 // @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+$bodyFont: 'Cabin';
+
+body {
+    font-family: $bodyFont;
+	
+    /* test bg*/
+	background: rgba(245,255,166,1);
+	background: -moz-linear-gradient(top, rgba(245,255,166,1) 0%, rgba(245,255,166,1) 12%, rgba(161,228,245,1) 34%, rgba(142,245,154,1) 67%, rgba(219,79,191,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(245,255,166,1)), color-stop(12%, rgba(245,255,166,1)), color-stop(34%, rgba(161,228,245,1)), color-stop(67%, rgba(142,245,154,1)), color-stop(100%, rgba(219,79,191,1)));
+	background: -webkit-linear-gradient(top, rgba(245,255,166,1) 0%, rgba(245,255,166,1) 12%, rgba(161,228,245,1) 34%, rgba(142,245,154,1) 67%, rgba(219,79,191,1) 100%);
+	background: -o-linear-gradient(top, rgba(245,255,166,1) 0%, rgba(245,255,166,1) 12%, rgba(161,228,245,1) 34%, rgba(142,245,154,1) 67%, rgba(219,79,191,1) 100%);
+	background: -ms-linear-gradient(top, rgba(245,255,166,1) 0%, rgba(245,255,166,1) 12%, rgba(161,228,245,1) 34%, rgba(142,245,154,1) 67%, rgba(219,79,191,1) 100%);
+	background: linear-gradient(to bottom, rgba(245,255,166,1) 0%, rgba(245,255,166,1) 12%, rgba(161,228,245,1) 34%, rgba(142,245,154,1) 67%, rgba(219,79,191,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5ffa6', endColorstr='#db4fbf', GradientType=0 );
+
+
+
+}
+
+.fa-btn {
+    margin-right: 6px;
+}
+
+.event-item{
+	min-height:420px;
+	background-color:#ffffff;
+	margin-bottom:25px;
+}
+
+.event-item:nth-child(3n+1) {
+    clear: left;
+}
+
+
+.event-item-image{
+	margin-top:25px;
+}
+
+h1, h2, h3{
+	text-transform: uppercase;
+}
