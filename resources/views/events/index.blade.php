@@ -11,11 +11,11 @@
 
         @foreach($events->data as $key => $value)
             
-            <div class="col-md-4 col-sm-6 col-xs-12 ">
+            <div class="row">
                 
-                <div class="col-sm-12 col-xs-12 event-item">
+                <div class="col-md-12 event-item">
 
-                    <div class="col-sm-12 col-xs-12 event-item-image">
+                    <div class="col-md-4 col-sm-4 event-item-image">
                         @if(isset($value->image))
                             <img src='{{ $value->image }}' class="img-responsive"/>
                         @else
@@ -23,24 +23,31 @@
                         @endif
                     </div>
 
-                    <div class="col-sm-12 col-xs-12 event-item-content">
+                    <div class="col-md-8 col-sm-8 event-item-content">
                         @if(isset($value->name->fi))
-                           <h3>{{ $value->name->fi }}</h3>
+                           <h3><a href="/events/{{ $value->id }}">{{ $value->name->fi }}</a></h3>
                         @endif
 
                         @if(isset($value->start_time))
-                            <p>{{ date("d.m.Y",strtotime($value->start_time)) }}</p>
+                            <p><strong>Date and time:</strong> {{ date("d.m.Y l h:i A",strtotime($value->start_time)) }} 
+                            {{ " - ".date("h:i A",strtotime($value->end_time)) }}</p>
+                        @endif
+                        
+                        @if(isset($value->location_extra_info->fi))
+                            <p><strong>Location:</strong> {{ $value->location_extra_info->fi }}</p>
                         @endif
 
-                        @if(isset($value->location_extra_info->fi))
-                            <p>{{ $value->location_extra_info->fi }}</p>
-                        @endif
+                        <hr/>
 
                         @if(isset($value->short_description->fi))
-                            <p>{{ $value->short_description->fi }}</p>
+                            <p>{{ strip_tags($value->short_description->fi) }}</p>
+                        @else
+                            <p><i>No event description.</i></p>
                         @endif
 
-                        <p>https://api.hel.fi/linkedevents/v1/event/{{ $value->id }}/?format=json</p>
+                        @if(isset($value->info_url->fi))
+                            <p><strong>Info URL:</strong> <a href="{{ $value->info_url->fi }}" target="_blank">{{ $value->info_url->fi }}</a></p>
+                        @endif
                     </div>
 
                 </div>

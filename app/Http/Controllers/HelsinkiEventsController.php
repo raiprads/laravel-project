@@ -54,4 +54,18 @@ class HelsinkiEventsController extends Controller
 		return view('events.index', compact('events'));
 	}
 
+	public function showEvent(Request $request)
+	{
+		$this->eventsClientUrl = array(
+			'base_uri' => 'https://api.hel.fi/linkedevents/v1/event/'.$request->event.'/',
+		    'timeout'  => 2.0,
+		);
+
+		$this->eventsDateRange = "";
+
+		$event = $this->getEventsContent();
+
+		return view('events.event', compact('event'));
+	}
+
 }
