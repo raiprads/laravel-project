@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventsSocialTable extends Migration
+class CreateSocialsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,10 @@ class CreateEventsSocialTable extends Migration
      */
     public function up()
     {
-        Schema::create('events_social', function (Blueprint $table) {
+        Schema::create('socials', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
-            $table->integer('helsinki_events_id')->unsigned();
+            $table->string('helsinki_event_id');
             $table->string('action');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateEventsSocialTable extends Migration
      */
     public function down()
     {
-        Schema::drop('events_social');
+        Schema::drop('socials');
     }
 }

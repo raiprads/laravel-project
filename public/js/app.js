@@ -17,14 +17,21 @@ $(".event-social-button button").click(function(){
         data: {
         	'_token': token,
         	'action' : button_array[0],
-        	'event_id': button_array[1]
+        	'helsinki_event_id': button_array[1]
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);            
+            console.log(data);
+            if(data.message!=0){
+            	alert(data.message);
+            	$('#'+button_id).prop('disabled', true);
+            }else{
+            	alert(data.message);
+            }
         },
         error: function (data) {
             console.log('Error:', data);
+            document.write(data.responseText);
         }
     });
 

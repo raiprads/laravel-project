@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHelsinkiEventsTable extends Migration
+class CreateEventsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateHelsinkiEventsTable extends Migration
         Schema::create('helsinki_events', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->string('listing_id')->unique();;
+            $table->string('listing_id')->unique();
             $table->string('start_time');
             $table->string('end_time');
             $table->text('short_description');

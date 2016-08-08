@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\HelsinkiEvents;
+use App\Socials;
 
+use Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use GuzzleHttp\Client;
@@ -68,9 +70,26 @@ class HelsinkiEventsController extends Controller
 		return view('events.event', compact('event'));
 	}
 
-	public function social(Request $request)
+	public function social(Request $request, HelsinkiEvents $helsinkiEvents)
 	{
-		echo json_encode($request->event_id);
+		$action = $request->action;
+
+		$social = new Socials($request->all()); 
+		
+		if (Auth::check())
+		{
+			$helsinkiEvents->addToSocial($social,Auth::user());
+
+			$message = array('message' => $helsinkiEvents->setMessage($action));
+		}else{
+			$message = array('message' => 0);
+		}
+		
+		echo json_encode($message);
+
 	}
+
+
+
 
 }

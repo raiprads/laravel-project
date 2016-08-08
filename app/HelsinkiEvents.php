@@ -24,5 +24,31 @@ class HelsinkiEvents extends Model
     	return $start.$end;
     }
 
+    public function socials(){
+
+    	return $this->hasMany(Socials::class);
+    	
+    }
+
+    public function addToSocial(Socials $socials, User $user)
+    {
+    	$socials->by($user);
+
+    	return $this->socials()->save($socials);
+    }
+
+    public function setMessage($action)
+    {
+    	if($action=='wish'){
+    		$message = "Added to wishlist!";
+    	}elseif($action=='watch'){
+    		$message = "Added to watched archive!";
+    	}else{
+    		$message = "Added to favorites!";
+    	}
+
+    	return $message;
+    }
+
 
 }
