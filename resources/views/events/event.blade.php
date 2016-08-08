@@ -41,10 +41,12 @@
 
                     <hr/>
 
-                    <div class="btn-group" role="group" aria-label="...">
-                      <button type="button" class="btn btn-default"><span class="fa fa-btn fa-star"></span> Add to favorites!</button>
-                      <button type="button" class="btn btn-default"><span class="fa fa-btn fa-check-square-o"></span> Add to wishlists!</button>
-                      <button type="button" class="btn btn-default"><span class="fa fa-btn fa-eye"></span> Watched already!</button>
+                    <input type="hidden" id="token" value="{{ csrf_token() }}">
+                    
+                    <div class="btn-group event-social-button" role="group" aria-label="...">
+                      <button type="button" class="btn btn-default" id="favorite_{{ $event->id }}"><span class="fa fa-btn fa-star"></span> Add to favorites!</button>
+                      <button type="button" class="btn btn-default" id="wish_{{ $event->id }}"><span class="fa fa-btn fa-check-square-o"></span> Add to wishlists!</button>
+                      <button type="button" class="btn btn-default" id="watch_{{ $event->id }}"><span class="fa fa-btn fa-eye"></span> Watched already!</button>
                     </div>
 
                     <hr/>

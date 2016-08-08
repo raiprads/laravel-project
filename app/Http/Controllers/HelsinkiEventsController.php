@@ -68,4 +68,9 @@ class HelsinkiEventsController extends Controller
 		return view('events.event', compact('event'));
 	}
 
+	public function social(Request $request)
+	{
+		echo json_encode($request->event_id);
+	}
+
 }

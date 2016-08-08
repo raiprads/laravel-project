@@ -16,6 +16,7 @@
 Route::get('/', 'HelsinkiEventsController@welcome');
 Route::get('/events/', 'HelsinkiEventsController@welcome');
 Route::get('/events/{event}', 'HelsinkiEventsController@showEvent');
+Route::post('/social', 'HelsinkiEventsController@social');
 
 Route::auth();
 
