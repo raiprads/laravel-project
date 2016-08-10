@@ -4,10 +4,21 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class HelsinkiEvents extends Model
+class Linkedevent extends Model
 {
     
-	public function returnClientEventsUrl()
+	protected $fillable = ['title',
+		'listing_id',
+		'start_time',
+		'end_time',
+		'short_description',
+		'description',
+		'location',
+		'image',
+		'info_url',
+		'api_link'];
+
+    public function returnClientEventsUrl()
     {
     	// source: http://dev.hel.fi/apis/
     	return array(
@@ -24,17 +35,17 @@ class HelsinkiEvents extends Model
     	return $start.$end;
     }
 
-    public function socials(){
+    public function bookmarks(){
 
-    	return $this->hasMany(Socials::class);
+    	return $this->hasMany(Bookmark::class);
     	
     }
 
-    public function addToSocial(Socials $socials, User $user)
+    public function saveToBookmark(Bookmark $bookmark, User $user)
     {
-    	$socials->by($user);
+    	$bookmark->by($user);
 
-    	return $this->socials()->save($socials);
+    	return $this->bookmarks()->save($bookmark);
     }
 
     public function setMessage($action)
@@ -49,6 +60,4 @@ class HelsinkiEvents extends Model
 
     	return $message;
     }
-
-
 }

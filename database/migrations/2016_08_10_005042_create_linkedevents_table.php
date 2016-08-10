@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventsTable extends Migration
+class CreateLinkedeventsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,9 @@ class CreateEventsTable extends Migration
      */
     public function up()
     {
-        Schema::create('helsinki_events', function (Blueprint $table) {
+        Schema::create('linkedevents', function (Blueprint $table) {
             $table->increments('id');
+
             $table->string('title');
             $table->string('listing_id')->unique();
             $table->string('start_time');
@@ -24,6 +25,7 @@ class CreateEventsTable extends Migration
             $table->text('image');
             $table->text('info_url');
             $table->text('api_link');
+            
             $table->timestamps();
         });
     }
@@ -35,6 +37,6 @@ class CreateEventsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('helsinki_events');
+        Schema::drop('linkedevents');
     }
 }

@@ -13,11 +13,11 @@ $(".event-social-button button").click(function(){
 	$.ajax({
 
         type: 'POST',
-        url: "/social",
+        url: "/bookmark",
         data: {
         	'_token': token,
         	'action' : button_array[0],
-        	'helsinki_event_id': button_array[1]
+        	'listing_id': button_array[1]
         },
         dataType: 'json',
         success: function (data) {
