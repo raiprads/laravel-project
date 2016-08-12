@@ -29,7 +29,13 @@ class Linkedevent extends Model
 
     public function setDateParams($strDate)
     {
-    	$start = "&start=".date("Y-m-d", strtotime("now"));
+    	if($strDate == "+1 month"){
+            $startDate = strtotime('now'); 
+        }else{
+            $startDate = strtotime('-1 month',strtotime($strDate)); 
+        }
+
+        $start = "&start=".date("Y-m-d", $startDate);
     	$end = "&end=".date("Y-m-d", strtotime($strDate));
 
     	return $start.$end;

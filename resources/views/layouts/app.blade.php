@@ -32,15 +32,20 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    Helsinki{eVents}
                 </a>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/home') }}">Home</a></li>
+                    @if (!Auth::guest())
+                        <li><a href="{{ url('/home') }}">Home</a></li>
+                    @endif
+                        
                     <li><a href="{{ url('/events') }}">Events</a></li>
+                    <li><a href="{{ url('/coming-soon') }}">Coming Soon</a></li>
+                    <li><a href="{{ url('/past-events') }}">Past Events</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -60,7 +65,7 @@
                                 <li><a href="{{ url('/wishlists') }}"><i class="fa fa-btn fa-check-square-o"></i>Wishlists</a></li>
                                 <li><a href="{{ url('/watched') }}"><i class="fa fa-btn fa-eye"></i>Watched</a></li>
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-       s                     </ul>
+                            </ul>
                         </li>
                     @endif
                 </ul>

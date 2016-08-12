@@ -6,7 +6,7 @@
     <div class="row">
 
         <div class="col-md-12">
-            <h1>Latests Events</h1>
+            <h1>Past Events</h1>
         </div>
 
         @foreach($events->data as $key => $value)

@@ -15,16 +15,22 @@ DB::listen(function($query){
 	//var_dump($query->sql, $query->bindings);
 });
 
+
 Route::get('/', 'LinkedeventsController@welcome');
 Route::get('/events/', 'LinkedeventsController@welcome');
+Route::get('/coming-soon/', 'LinkedeventsController@comingSoon');
+Route::get('/past-events/', 'LinkedeventsController@pastEvents');
 Route::get('/events/{event}', 'LinkedeventsController@showEvent');
 Route::post('/bookmark', 'LinkedeventsController@addToBookmark');
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
-Route::get('/favorites', 'LinkedeventsController@showFavorites');
+Route::group(['middleware' => 'auth'], function () {
 
-// Route::get('api/user', ['middleware' => 'auth.basic.once', function() {
-//     // Only authenticated users may enter...
-// }]);
+	// All my routes that needs a logged in user
+   	Route::get('/home', 'HomeController@index');
+	Route::get('/favorites', 'LinkedeventsController@showFavorites');
+	Route::get('/wishlists', 'LinkedeventsController@showWishlists');
+	Route::get('/watched', 'LinkedeventsController@showWatched');
+
+});

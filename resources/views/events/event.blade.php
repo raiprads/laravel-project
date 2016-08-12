@@ -31,8 +31,11 @@
                     @endif
 
                     @if(isset($event->start_time))
-                        <p><strong>Date and time:</strong> {{ date("d.m.Y l h:i A",strtotime($event->start_time)) }} 
-                        {{ " - ".date("h:i A",strtotime($event->end_time)) }}</p>
+                        <p><strong>Start time:</strong> {{ date("M-d-Y l h:i A",strtotime($event->start_time)) }}</p>
+                    @endif
+
+                    @if(isset($event->end_time))
+                        <p><strong>End time:</strong> {{ date("M-d-Y l h:i A",strtotime($event->end_time)) }}</p>
                     @endif
                     
                     @if(isset($event->location_extra_info->fi))

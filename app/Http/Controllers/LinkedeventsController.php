@@ -15,12 +15,17 @@ class LinkedeventsController extends Controller
 {
     protected $eventsResponse;
 	protected $eventsClientUrl;
+
 	protected $eventsDateRange;
+	protected $comingEventsDateRange;
+	protected $pastEventsDateRange;
 
 	public function __construct(Linkedevent $linkedevent)
 	{
 		$this->eventsDateRange = $linkedevent->setDateParams("+1 month");
-		
+		$this->comingEventsDateRange = $linkedevent->setDateParams("+2 month");
+		$this->pastEventsDateRange = $linkedevent->setDateParams("-1 month");
+
 		$this->eventsClientUrl = $linkedevent->returnClientEventsUrl();
 	}
 
@@ -54,6 +59,24 @@ class LinkedeventsController extends Controller
 		$events = $this->getEventsContent();
 
 		return view('events.index', compact('events'));
+	}
+
+	public function comingSoon()
+	{
+		$this->eventsDateRange = $this->comingEventsDateRange;
+
+		$events = $this->getEventsContent();
+
+		return view('events.comingsoon', compact('events'));
+	}
+
+	public function pastEvents()
+	{
+		$this->eventsDateRange = $this->pastEventsDateRange;
+
+		$events = $this->getEventsContent();
+
+		return view('events.pastevents', compact('events'));
 	}
 
 	public function showEvent(Request $request)
@@ -121,9 +144,36 @@ class LinkedeventsController extends Controller
 		$events = $bookmark->where('user_id', Auth::id())
 			->where('action', 'favorite')
 			->join('linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id')
-			->join('users', 'users.id', '=', 'bookmarks.user_id')->get();
+			->join('users', 'users.id', '=', 'bookmarks.user_id')
+			->orderBy('start_time', 'DESC')->get();
         
 		return view('events.favorites', compact('events'));	
+	}
+
+	public function showWishlists()
+	{
+		$bookmark = new Bookmark;
+
+		$events = $bookmark->where('user_id', Auth::id())
+			->where('action', 'wish')
+			->join('linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id')
+			->join('users', 'users.id', '=', 'bookmarks.user_id')
+			->orderBy('start_time', 'DESC')->get();
+        
+		return view('events.wishlists', compact('events'));	
+	}
+
+	public function showWatched()
+	{
+		$bookmark = new Bookmark;
+
+		$events = $bookmark->where('user_id', Auth::id())
+			->where('action', 'watch')
+			->join('linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id')
+			->join('users', 'users.id', '=', 'bookmarks.user_id')
+			->orderBy('start_time', 'DESC')->get();
+        
+		return view('events.watch', compact('events'));	
 	}
 
 
