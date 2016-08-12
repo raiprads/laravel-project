@@ -11,7 +11,9 @@
 |
 */
 
-
+DB::listen(function($query){
+	//var_dump($query->sql, $query->bindings);
+});
 
 Route::get('/', 'LinkedeventsController@welcome');
 Route::get('/events/', 'LinkedeventsController@welcome');
@@ -21,6 +23,7 @@ Route::post('/bookmark', 'LinkedeventsController@addToBookmark');
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/favorites', 'LinkedeventsController@showFavorites');
 
 // Route::get('api/user', ['middleware' => 'auth.basic.once', function() {
 //     // Only authenticated users may enter...

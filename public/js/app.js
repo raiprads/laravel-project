@@ -23,15 +23,23 @@ $(".event-social-button button").click(function(){
         success: function (data) {
             console.log(data);
             if(data.message!=0){
-            	alert(data.message);
+                $('#bookmark-buttons').hide();
+            	$('#bookmark-message').html('<div class="alert alert-success" role="alert">'+data.message+'</div>');
             	$('#'+button_id).prop('disabled', true);
             }else{
-            	alert(data.message);
+            	$('#bookmark-buttons').hide();
+                $('#bookmark-message').html('<div class="alert alert-info" role="alert">Please login.</div>');
             }
+
+            setTimeout(function() {
+                $('#bookmark-buttons').show();
+                $('#bookmark-message').html('');
+            }, 3000);
         },
         error: function (data) {
-            console.log('Error:', data);
-            document.write(data.responseText);
+            console.log('Error:', data.error);
+            $('#bookmark-message').html('<div class="alert alert-danger" role="alert">'+data.error+'</div>');
+            //document.write(data.responseText);
         }
     });
 

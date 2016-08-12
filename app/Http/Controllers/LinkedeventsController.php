@@ -70,65 +70,32 @@ class LinkedeventsController extends Controller
 		return view('events.event', compact('event'));
 	}
 
-	public function assignEventInfo(Linkedevent $linkedevent, $requestListingId)
+	public function addToBookmark(Request $request, Bookmark $bookmark)
 	{
-		//get event info and saving it
-		$this->eventsClientUrl = array(
-			'base_uri' => 'https://api.hel.fi/linkedevents/v1/event/'.$requestListingId.'/',
-		    'timeout'  => 2.0,
-		);
-		$this->eventsDateRange = "";
-		$event = $this->getEventsContent();
+		$linkedevent = $bookmark->checkEvent($request->listing_id);
 
-		//assign values
-		$linkedevent->title  = $event->name->fi;
-		$linkedevent->listing_id  = $request->listing_id;
-		$linkedevent->start_time = $event->start_time;
-		$linkedevent->end_time = $event->end_time;
-		
-		if(isset($event->description->fi))
-			$linkedevent->description = $event->description->fi;
-
-		if(isset($event->short_description->fi))
-			$linkedevent->short_description = $event->short_description->fi;
-
-		if(isset($event->location_extra_info->fi))
-			$linkedevent->location = $event->location_extra_info->fi;
-
-		if(isset($event->images[0]->url))
-			$linkedevent->image = $event->images[0]->url;
-
-		if(isset($event->info_url->fi))
-			$linkedevent->info_url = $event->info_url->fi;				
-
-		$linkedevent->api_link = 'https://api.hel.fi/linkedevents/v1/event/'.$requestListingId.'/?format=json';
-
-		return $linkedevent;
-	}
-
-	public function addToBookmark(Request $request, Linkedevent $linkedevent)
-	{
-		$event = Linkedevent::where('listing_id', $request->listing_id )->first();
-
-		if($event === NULL ){
-			$linkedevent = assignEventInfo($linkedevent,$request->listing_id);
-
-			$linkedevent->save();
-		}else{
-			$linkedevent->id = $event->id;
+		if(is_null($linkedevent)){
+			//get event info and save it
+			$this->eventsClientUrl = array(
+				'base_uri' => 'https://api.hel.fi/linkedevents/v1/event/'.$request->listing_id.'/',
+			    'timeout'  => 2.0,
+			);
+			$this->eventsDateRange = "";
+			$event = $this->getEventsContent();
+			$event->listing_id = $request->listing_id;
+			
+			$linkedevent = $bookmark->assignEventInfoAndSave($event);			
 		}
-
-		//echo json_encode($linkedevent->id);
 
 		if (Auth::check())
 		{
 			///check here
-			$findBookmark = array(
+			$existingEvent = array(
 				'action'=>$request->action,
 				'linkedevent_id'=>$linkedevent->id,
 				'user_id'=>Auth::user()->id,
 				);
-			$count = Bookmark()->checkExistingBookmark($findBookmark);
+			$count = $bookmark->checkExistingBookmark($existingEvent);
 
 			if($count==0){
 				$bookmark = new Bookmark($request->except('listing_id'));
@@ -136,7 +103,7 @@ class LinkedeventsController extends Controller
 				$linkedevent->saveToBookmark($bookmark,Auth::user());
 				$message = array('message' => $linkedevent->setMessage($request->action));
 			}else{
-				$message = array('message' => "You have book marked this already!");
+				$message = array('message' => "You have bookmarked this already!");
 			}
 			
 		}else{
@@ -146,5 +113,18 @@ class LinkedeventsController extends Controller
 		echo json_encode($message);
 
 	}
+
+	public function showFavorites()
+	{
+		$bookmark = new Bookmark;
+
+		$events = $bookmark->where('user_id', Auth::id())
+			->where('action', 'favorite')
+			->join('linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id')
+			->join('users', 'users.id', '=', 'bookmarks.user_id')->get();
+        
+		return view('events.favorites', compact('events'));	
+	}
+
 
 }

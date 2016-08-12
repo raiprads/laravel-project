@@ -60,4 +60,6 @@ class Linkedevent extends Model
 
     	return $message;
     }
+
+    
 }

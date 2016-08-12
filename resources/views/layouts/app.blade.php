@@ -56,11 +56,11 @@
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/favorite') }}"><i class="fa fa-btn fa-star"></i>Favorites</a></li>
+                                <li><a href="{{ url('/favorites') }}"><i class="fa fa-btn fa-star"></i>Favorites</a></li>
                                 <li><a href="{{ url('/wishlists') }}"><i class="fa fa-btn fa-check-square-o"></i>Wishlists</a></li>
                                 <li><a href="{{ url('/watched') }}"><i class="fa fa-btn fa-eye"></i>Watched</a></li>
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                            </ul>
+       s                     </ul>
                         </li>
                     @endif
                 </ul>
