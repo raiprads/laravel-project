@@ -11,11 +11,10 @@
 
         <div class="row">
 
-            <div class="col-md-12">
-            <div class="col-md-12 event-item">
+            <div class="col-lg-12 col-md-12 event-item">
 
             
-                <div class="col-md-6 col-sm-12 event-item-image">
+                <div class="col-lg-6 col-md-6 col-sm-12 event-item-image-lg">
                     <div class="container-fluid">
                     @if(isset($event->images[0]->url))
                         <img src='{{ $event->images[0]->url }}' class="img-responsive center-block col-md-12 col-sm-12"/>
@@ -25,7 +24,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-sm-12 event-item-content event-item-content-lg">
+                <div class="col-lg-6 col-md-6 col-sm-12 event-item-content">
                     @if(isset($event->name->fi))
                        <h3>{{ $event->name->fi }}</h3>
                     @endif
@@ -47,9 +46,27 @@
                     <input type="hidden" id="token" value="{{ csrf_token() }}">
                     
                     <div class="btn-group event-social-button" id="bookmark-buttons" role="group" aria-label="...">
-                      <button type="button" class="btn btn-default" id="favorite_{{ $event->id }}"><span class="fa fa-btn fa-star"></span> Add to favorites!</button>
-                      <button type="button" class="btn btn-default" id="wish_{{ $event->id }}"><span class="fa fa-btn fa-check-square-o"></span> Add to wishlists!</button>
-                      <button type="button" class="btn btn-default" id="watch_{{ $event->id }}"><span class="fa fa-btn fa-eye"></span> Watched already!</button>
+                        <button type="button" class="btn btn-sm btn-default" id="favorite_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('favorite', $event->id ) }}>
+                            <span class="fa fa-btn fa-star"></span>
+                            <span class="button_label">
+                                {{ showNumberOfBookmarks('favorite', $event->id) }}
+                            </span>
+                        </button>
+
+                        <button type="button" class="btn btn-sm btn-default" id="wish_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('wish', $event->id ) }}>
+                            <span class="fa fa-btn fa-check-square-o"></span>
+                            <span class="button_label">
+                                {{ showNumberOfBookmarks('wish', $event->id) }}
+                            </span>
+                        </button>
+
+                        <button type="button" class="btn btn-sm btn-default" id="watch_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('watch', $event->id ) }}>
+                            <span class="fa fa-btn fa-eye"></span>
+                            <span class="button_label">
+                                {{ showNumberOfBookmarks('watch', $event->id) }}
+                            </span>
+                        </button>
+
                     </div>
 
                     <div id="bookmark-message"></div>
@@ -63,7 +80,7 @@
                     @endif
 
                     @if(isset($event->info_url->fi))
-                        <p><strong>Info URL:</strong> <a href="{{ $event->info_url->fi }}" target="_blank">{{ $event->info_url->fi }}</a></p>
+                        <p><strong>Info URL:</strong> <a href="{{ $event->info_url->fi }}" target="_blank">{{ parse_url( $event->info_url->fi , 1) }}</a></p>
                     @endif
 
                     <div class="btnBackToEvents">
@@ -73,7 +90,6 @@
                 </div>
 
 
-            </div>
             </div>
 
         </div>

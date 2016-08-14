@@ -25,7 +25,7 @@ class Bookmark extends Model
 
 	public function checkEvent($listing_id)
 	{
-		$linkedevent = Linkedevent::where('listing_id','=',$listing_id)->first();
+		$linkedevent = Linkedevent::where('listing_id',$listing_id)->first();
 
 		return $linkedevent;
 	}
@@ -69,4 +69,33 @@ class Bookmark extends Model
 			->where('user_id', $bookmark['user_id'])->count();
 		return $count;
 	}
+
+    public function getNumberOfBookmarks($bookmark = [])
+    {
+        $count = Bookmark::where('action', $bookmark['action'])
+            ->where('linkedevent_id', $bookmark['linkedevent_id'])->count();
+        return $count;
+    }
+
+    public function getButtonLabel($action, $count)
+    {
+        if($count>0){
+            if($action=='wish'){
+                return "($count) Added to Wishlists";
+            }elseif($action=='watch'){
+                return "($count) Added to Watchlists";
+            }elseif($action=='favorite'){
+                return "($count) Added to Favorites";
+            }
+        }else{
+            if($action=='wish'){
+                return "Add to Wishlists";
+            }elseif($action=='watch'){
+                return "Add to Watchlists";
+            }elseif($action=='favorite'){
+                return "Add to Favorites";
+            }
+        }
+    }
+
 }

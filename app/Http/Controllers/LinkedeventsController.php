@@ -124,7 +124,18 @@ class LinkedeventsController extends Controller
 				$bookmark = new Bookmark($request->except('listing_id'));
 				$bookmark->linkedevent_id = $linkedevent->id;
 				$linkedevent->saveToBookmark($bookmark,Auth::user());
-				$message = array('message' => $linkedevent->setMessage($request->action));
+
+				$count = $bookmark->getNumberOfBookmarks(array(
+		    		'linkedevent_id'=> $linkedevent->id,
+		    		'action'=> $request->action
+		    	));
+
+		    	$buttonLabel = $bookmark->getButtonLabel($request->action, $count);
+
+				$message = array(
+						'message' => $linkedevent->setMessage($request->action),
+						'button_label' => $buttonLabel
+					);
 			}else{
 				$message = array('message' => "You have bookmarked this already!");
 			}

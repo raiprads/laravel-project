@@ -9,11 +9,14 @@ body {
 .fa-btn {
   margin-right: 6px; }
 
-.event-item {
+.event-item, .event-item-horizontal {
   background-color: #ffffff;
   margin-bottom: 25px;
   padding-top: 15px;
   padding-bottom: 15px; }
+
+.event-item {
+  min-height: 550px; }
 
 .btnBackToEvents {
   padding-top: 25px;
@@ -24,6 +27,9 @@ body {
   margin-top: 25px;
   color: #ffffff;
   background-color: blue; }
+
+.event-item-image {
+  height: 210px; }
 
 h1, h2, h3 {
   text-transform: uppercase; }
