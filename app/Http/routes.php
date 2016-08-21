@@ -16,7 +16,7 @@ DB::listen(function($query){
 });
 
 
-Route::get('/', 'LinkedeventsController@welcome');
+Route::get('/', 'LinkedeventsController@index');
 Route::get('/events/', 'LinkedeventsController@welcome');
 Route::get('/coming-soon/', 'LinkedeventsController@comingSoon');
 Route::get('/past-events/', 'LinkedeventsController@pastEvents');
@@ -28,7 +28,7 @@ Route::auth();
 Route::group(['middleware' => 'auth'], function () {
 
 	// All my routes that needs a logged in user
-   	Route::get('/home', 'HomeController@index');
+   	Route::get('/home', 'LinkedeventsController@index');
 	Route::get('/favorites', 'LinkedeventsController@showFavorites');
 	Route::get('/wishlists', 'LinkedeventsController@showWishlists');
 	Route::get('/watched', 'LinkedeventsController@showWatched');

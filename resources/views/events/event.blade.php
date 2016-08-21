@@ -46,21 +46,21 @@
                     <input type="hidden" id="token" value="{{ csrf_token() }}">
                     
                     <div class="btn-group event-social-button" id="bookmark-buttons" role="group" aria-label="...">
-                        <button type="button" class="btn btn-sm btn-default" id="favorite_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('favorite', $event->id ) }}>
+                        <button type="button" name="addToFavorites" class="btn btn-sm btn-default" id="favorite_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('favorite', $event->id ) }}>
                             <span class="fa fa-btn fa-star"></span>
                             <span class="button_label">
                                 {{ showNumberOfBookmarks('favorite', $event->id) }}
                             </span>
                         </button>
 
-                        <button type="button" class="btn btn-sm btn-default" id="wish_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('wish', $event->id ) }}>
+                        <button type="button" name="addToWishlists" class="btn btn-sm btn-default" id="wish_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('wish', $event->id ) }}>
                             <span class="fa fa-btn fa-check-square-o"></span>
                             <span class="button_label">
                                 {{ showNumberOfBookmarks('wish', $event->id) }}
                             </span>
                         </button>
 
-                        <button type="button" class="btn btn-sm btn-default" id="watch_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('watch', $event->id ) }}>
+                        <button type="button" name="addToWatchlists" class="btn btn-sm btn-default" id="watch_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('watch', $event->id ) }}>
                             <span class="fa fa-btn fa-eye"></span>
                             <span class="button_label">
                                 {{ showNumberOfBookmarks('watch', $event->id) }}

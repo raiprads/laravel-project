@@ -2,7 +2,7 @@
 
 use App\Linkedevent;
 use App\Bookmark;
-use Auth;
+//use Auth;
 
 function disableBookmarkButton($action, $listingId)
 {

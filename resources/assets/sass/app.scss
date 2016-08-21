@@ -51,3 +51,16 @@ body {
 h1, h2, h3{
 	text-transform: uppercase;
 }
+
+.carousel-inner .item{
+	height:300px;
+	overflow:hidden;
+}
+
+.carousel-inner .item img{
+	width:100%;
+}
+
+.carousel{
+	margin-bottom:25px;
+}

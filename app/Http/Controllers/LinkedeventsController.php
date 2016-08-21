@@ -61,6 +61,33 @@ class LinkedeventsController extends Controller
 		return view('events.index', compact('events'));
 	}
 
+	public function index()
+	{
+		
+		$events = $this->getEventsContent();
+
+		//assign carousel value
+		$carousel = [];
+
+		foreach($events->data as $key => $value){
+
+			if(isset($value->image)){
+
+				array_push($carousel,($value));
+
+			}
+
+		}
+
+		if(count($carousel)>5)
+			$carousel = array_slice($carousel, 0, 5);
+		else
+			$carousel = array_slice($carousel, 0, count($carousel));
+
+		return view('home', compact('carousel', 'events'));
+	
+	}
+
 	public function comingSoon()
 	{
 		$this->eventsDateRange = $this->comingEventsDateRange;
