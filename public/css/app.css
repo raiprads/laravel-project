@@ -1,10 +1,7 @@
 body {
   font-family: "Cabin";
-  /* test bg*/
-  background: #f7f0a1;
-  background: -webkit-gradient(left top, left bottom, color-stop(0%, #f7f0a1), color-stop(72%, #f7f0a1), color-stop(100%, #ffc773));
-  background: linear-gradient(to bottom, #f7f0a1 0%, #f7f0a1 72%, #ffc773 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f0a1', endColorstr='#ffc773', GradientType=0 ); }
+  background-image: url("/images/eight_horns.png");
+  background-repeat: repeat; }
 
 .fa-btn {
   margin-right: 6px; }

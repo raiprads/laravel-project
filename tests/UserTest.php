@@ -39,13 +39,62 @@ class UserTest extends TestCase
    
     }
 
+    /** @test */
+    public function a_page_that_show_all_favorite_events_of_a_user()
+    {
+    	$user = factory(App\User::class)->create();
+    	$listing_ids = ['helmet:101421','kulke:38874'];
+
+    	foreach($listing_ids as $listing_id){
+    		$this->bookmarkThisEvent($listing_id, $user);
+    	}
+    	
+    	$this->visit('/favorites')
+              ->see('helmet:101421')
+              ->see('kulke:38874');
+    
+    }
+
+    /** @test */
+    public function a_new_user_registration()
+    {
+    	
+    	$this->visit('/register')
+        	->type('Ryan Prader', 'name')
+        	->type('ryan@foobar.biz', 'email')
+        	->type('1234567890', 'password')
+        	->type('1234567890', 'password_confirmation')
+        	->press('Register')
+        	->seePageIs('/');
+    
+    }
+
+    /** @test */
+    public function a_relation_between_user_who_bookmarked_an_event()
+    {
+    	$bookmark = new Bookmark;	    
+	    $linkedevent = new Linkedevent;
+
+    	$user = factory(App\User::class)->create();
+    	$listing_id = 'helmet:101421';
+
+    	$this->bookmarkThisEvent($listing_id, $user);
+
+    	$linkedevent = $bookmark->checkEvent($listing_id);
+
+    	$bookmark = Bookmark::where('linkedevent_id', $linkedevent->id)->orderBy('id','desc')->first();
+
+    	$this->assertEquals($bookmark->user_id,$user->id);
+
+    }
+
     protected function bookmarkThisEvent($listing_id, $user)
     {
     	$bookmark = new Bookmark;	    
 	    $linkedevent = new Linkedevent;
 
     	$action = 'favorite';
-    	$guzzleUrl = new GuzzleFunctions("https://api.hel.fi/linkedevents/v1/event/$listing_id");
+    	$guzzleUrl = new GuzzleFunctions('https://api.hel.fi/linkedevents/v1/event/'.$listing_id);
 
         $this->actingAs($user)
              ->withSession(['foo' => 'bar']);

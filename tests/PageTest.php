@@ -13,7 +13,8 @@ class PageTest extends TestCase
     /** @test */
     public function a_guzzle_client_connection_to_helsinki_api()
     {
-    	
+    	//may cause an error sometimes due to fetching of data with guzzle
+
     	$response = $this->fetchDataFromApi("https://api.hel.fi/linkedevents/v1/event/");
 
 		$this->assertEquals($response->getStatusCode(), 200);
@@ -43,6 +44,19 @@ class PageTest extends TestCase
     	$events = $guzzleUrl->getAndParseContent($guzzleUrl->setClientRequest());
 
     	$this->assertGreaterThan(0,count($events->data));
+    
+    }
+
+    
+    /** @test */
+    public function a_carousel_in_index_page_with_content_from_api()
+    {
+    	
+    	$this->visit('/')
+    		->see('carousel')
+            ->see('item  active'); 
+
+            //indicates that the content was generated and set the first data to be active
     
     }
 
