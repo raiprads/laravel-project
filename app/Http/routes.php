@@ -1,19 +1,22 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
+/**
+ * Routes file
+ *
+ * PHP version 5
+ *
+ * @category PHP
+ * @package  Laravel
+ * @author   Ryan Prader <raiprads@gmail.com>
+ * @license  https://www.gnu.org/licenses/gpl.html GNU General Public License
+ * @link     http://localhost
+ */
 
-DB::listen(function($query){
-	//var_dump($query->sql, $query->bindings);
-});
+DB::listen(
+    function ($query) {
+        //var_dump($query->sql, $query->bindings);
+    }
+);
 
 
 Route::get('/', 'LinkedeventsController@index');
@@ -25,12 +28,14 @@ Route::post('/bookmark', 'LinkedeventsController@addToBookmark');
 
 Route::auth();
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(
+    ['middleware' => 'auth'], function () {
 
-	// All my routes that needs a logged in user
-   	Route::get('/home', 'LinkedeventsController@index');
-	Route::get('/favorites', 'LinkedeventsController@showFavorites');
-	Route::get('/wishlists', 'LinkedeventsController@showWishlists');
-	Route::get('/watched', 'LinkedeventsController@showWatched');
+        // All my routes that needs a logged in user
+        Route::get('/home', 'LinkedeventsController@index');
+        Route::get('/favorites', 'LinkedeventsController@showFavorites');
+        Route::get('/wishlists', 'LinkedeventsController@showWishlists');
+        Route::get('/watched', 'LinkedeventsController@showWatched');
 
-});
+    }
+);

@@ -1,5 +1,4 @@
 <?php
-
 use App\Bookmark;
 use App\Linkedevent;
 
