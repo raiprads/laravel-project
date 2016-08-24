@@ -98,7 +98,10 @@ class Bookmark extends Model
         
         $linkedevent->listing_id  = $eventInfo->listing_id;
         $linkedevent->start_time = $eventInfo->start_time;
-        $linkedevent->end_time = $eventInfo->end_time;
+        
+        if (isset($eventInfo->end_time)) {
+            $linkedevent->end_time = $eventInfo->end_time;
+        }
         
         if (isset($eventInfo->description->fi)) {
             $linkedevent->description = $eventInfo->description->fi; 
