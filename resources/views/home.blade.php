@@ -24,12 +24,25 @@
                 @foreach($carousel as $key => $value)
 
                     <div class="item @if($key==0) active @endif ">
-                      <img src="{{ $value->image }}" alt="{{ $value->name->fi }}">
+                      <img src="{{ $value->image }}" alt="
+                        @if (isset($value->name->fi))
+                          {{ $value->name->fi }}
+                        @elseif (isset($value->name->en))
+                          {{ $value->name->en }}
+                        @endif
+                        ">
                       <div class="carousel-caption">
-                        <h3><a href="/events/{{ $value->id }}">{{ $value->name->fi }}</a></h3>
-                        
-                        @if(isset($value->short_description->fi))
+
+                        @if (isset($value->name->fi))
+                          <h3><a href="/events/{{ $value->id }}">{{ $value->name->fi }}</a></h3>
+                        @elseif (isset($value->name->en))
+                          <h3><a href="/events/{{ $value->id }}">{{ $value->name->en }}</a></h3>
+                        @endif
+
+                        @if (isset($value->short_description->fi))
                             <p>{{ strip_tags($value->short_description->fi) }}</p>
+                        @elseif (isset($value->short_description->en))
+                            <p>{{ strip_tags($value->short_description->en) }}</p>
                         @endif
 
                       </div>
@@ -84,6 +97,8 @@
                         <div class="col-md-12 event-item-content">
                             @if(isset($value->name->fi))
                                <h3><a href="/events/{{ $value->id }}">{{ $value->name->fi }}</a></h3>
+                            @else
+                               <h3><a href="/events/{{ $value->id }}">{{ $value->name->en }}</a></h3>
                             @endif
 
                             @if(isset($value->start_time))
@@ -102,6 +117,8 @@
 
                             @if(isset($value->short_description->fi))
                                 <p>{{ strip_tags($value->short_description->fi) }}</p>
+                            @elseif (isset($value->short_description->en))
+                                <p>{{ strip_tags($value->short_description->en) }}</p>
                             @else
                                 <p><i>No event description.</i></p>
                             @endif

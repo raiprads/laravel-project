@@ -1,13 +1,17 @@
 $(document).ready(function(){
 
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('[name="_token"]').val()
+    }
+});
 
 //click favorite, wish, or watch button
 $(".event-social-button button").click(function(){
 
     var html_button_id = this.id;
-	var button_array = html_button_id.split("_");
-	var token = $('#token').val();
-    var listing_id = button_array[1]+':'+button_array[2];
+    var button_array = html_button_id.split("_");
+	var listing_id = button_array[1]+':'+button_array[2];
 
 	console.log(html_button_id);
 
@@ -16,7 +20,6 @@ $(".event-social-button button").click(function(){
         type: 'POST',
         url: "/bookmark",
         data: {
-        	'_token': token,
         	'action' : button_array[0],
         	'listing_id': listing_id
         },
@@ -42,9 +45,7 @@ $(".event-social-button button").click(function(){
             }, 3000);
         },
         error: function (data) {
-            console.log('Error:', data.error);
-            $('#bookmark-message').html('<div class="alert alert-danger" role="alert">'+data.error+'</div>');
-            //document.write(data.responseText);
+            document.write(data.responseText);
         }
     });
 

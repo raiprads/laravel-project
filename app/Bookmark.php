@@ -87,17 +87,29 @@ class Bookmark extends Model
         //assign values
         $linkedevent = new Linkedevent;
 
-        $linkedevent->title  = $eventInfo->name->fi;
+        if (isset($eventInfo->name->fi)) {
+            $linkedevent->title  = $eventInfo->name->fi;    
+        } elseif (isset($eventInfo->name->en)) {
+            $linkedevent->title  = $eventInfo->name->en;
+        } else {
+            //just make the title id if still there is no title 
+            $linkedevent->title  = $eventInfo->listing_id;
+        }
+        
         $linkedevent->listing_id  = $eventInfo->listing_id;
         $linkedevent->start_time = $eventInfo->start_time;
         $linkedevent->end_time = $eventInfo->end_time;
         
         if (isset($eventInfo->description->fi)) {
             $linkedevent->description = $eventInfo->description->fi; 
+        } elseif (isset($eventInfo->description->en)) {
+            $linkedevent->description = $eventInfo->description->en; 
         }
 
         if (isset($eventInfo->short_description->fi)) {
             $linkedevent->short_description = $eventInfo->short_description->fi; 
+        } elseif (isset($eventInfo->short_description->en)) {
+            $linkedevent->short_description = $eventInfo->short_description->en; 
         }
 
         if (isset($eventInfo->location_extra_info->fi)) {

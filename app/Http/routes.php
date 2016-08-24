@@ -12,15 +12,8 @@
  * @link     http://localhost
  */
 
-DB::listen(
-    function ($query) {
-        //var_dump($query->sql, $query->bindings);
-    }
-);
-
-
 Route::get('/', 'LinkedeventsController@index');
-Route::get('/events/', 'LinkedeventsController@welcome');
+Route::get('/events/', 'LinkedeventsController@recentEvents');
 Route::get('/coming-soon/', 'LinkedeventsController@comingSoon');
 Route::get('/past-events/', 'LinkedeventsController@pastEvents');
 Route::get('/events/{event}', 'LinkedeventsController@showEvent');

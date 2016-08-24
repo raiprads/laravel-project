@@ -13,7 +13,11 @@
 
 namespace App;
 
+use Auth;
+use App\Bookmark;
+
 use Illuminate\Database\Eloquent\Model;
+use GuzzleHttp\Client;
 
 /**
  * Class for Linkedevent model
@@ -39,6 +43,9 @@ class Linkedevent extends Model
     'info_url',
     'api_link'];
 
+    public $clientUrl;
+    public $eventsDateRange = "";
+
     /**
     * Set a clients url for guzzle request
     *
@@ -51,6 +58,40 @@ class Linkedevent extends Model
         'base_uri' => 'http://api.hel.fi/linkedevents/v0.1/event/',
         'timeout'  => 2.0,
         );
+    }
+
+    /**
+    * Get client request for guzzle 
+    *
+    * @return string
+    */
+    public function getClientRequest()
+    {
+        $eventsClient = new Client($this->clientUrl);
+
+        return $eventsClient->request('GET', '?format=json'.$this->eventsDateRange);
+    }
+
+    /**
+    * Parse the event content to stdclass
+    *
+    * @return stdObj 'events data'
+    */
+    public function getEventsContent()
+    {
+        $eventsResponse = $this->getClientRequest();
+
+        if ($eventsResponse->getStatusCode()==200) {
+            $body = $eventsResponse->getBody(true);
+
+            $body = $eventsResponse->getBody(true);
+            
+            $bodyContents = $body->getContents();
+
+            return json_decode($bodyContents);
+        } else {
+            return $eventsResponse->getReasonPhrase();
+        }
     }
 
     /**
@@ -85,6 +126,101 @@ class Linkedevent extends Model
 
         return $this->hasMany(Bookmark::class);
         
+    }
+
+    /**
+    * Fetch a record that shows the user's favorite events
+    *
+    * @return stdObj
+    */
+    public function fetchUsersFavoriteEvents()
+    {
+        
+        $bookmark = new Bookmark;
+
+        return $bookmark->where('user_id', Auth::id())
+            ->where('action', 'favorite')
+            ->join(
+                'linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id'
+            )
+            ->join('users', 'users.id', '=', 'bookmarks.user_id')
+            ->orderBy('start_time', 'DESC')->get();
+    
+    }
+
+    /**
+    * Fetch a record that shows the user's event wishlists
+    *
+    * @return stdObj
+    */
+    public function fetchUsersWishLists()
+    {
+        
+        $bookmark = new Bookmark;
+
+        return $bookmark->where('user_id', Auth::id())
+            ->where('action', 'wish')
+            ->join(
+                'linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id'
+            )
+            ->join('users', 'users.id', '=', 'bookmarks.user_id')
+            ->orderBy('start_time', 'DESC')->get();
+    
+    }
+
+    /**
+    * Fetch a record that shows the user's event watchlists
+    *
+    * @return stdObj
+    */
+    public function fetchUsersWatchLists()
+    {
+        
+        $bookmark = new Bookmark;
+
+        return $bookmark->where('user_id', Auth::id())
+            ->where('action', 'watch')
+            ->join(
+                'linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id'
+            )
+            ->join('users', 'users.id', '=', 'bookmarks.user_id')
+            ->orderBy('start_time', 'DESC')->get();
+    
+    }
+
+
+    /**
+    * Set the content or list of events for carousel and limit the number
+    *
+    * @param stdObj $events 'events object that contains the whole list'
+    * @param int    $count  'limit the number of events'
+    *
+    * @return string
+    */
+    public function setEventsForCarousel($events, $count)
+    {
+        
+        //assign carousel value
+        $carousel = [];
+
+        foreach ($events->data as $key => $value) {
+
+            if (isset($value->image)) {
+
+                array_push($carousel, ($value));
+
+            }
+
+        }
+
+        if (count($carousel)>$count) {
+            $carousel = array_slice($carousel, 0, $count); 
+        } else {
+            $carousel = array_slice($carousel, 0, count($carousel)); 
+        }
+
+        return $carousel;
+    
     }
 
     /**

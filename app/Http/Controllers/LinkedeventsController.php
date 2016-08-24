@@ -19,7 +19,6 @@ use App\Bookmark;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests;
-use GuzzleHttp\Client;
 
 /**
  * LinkedeventsController class manages all the events function from the model
@@ -57,50 +56,19 @@ class LinkedeventsController extends Controller
     }
 
     /**
-    * Get client request for guzzle 
-    *
-    * @return string
-    */
-    public function getClientRequest()
-    {
-        $eventsClient = new Client($this->eventsClientUrl);
-
-        return $eventsClient->request('GET', '?format=json'.$this->eventsDateRange);
-    }
-
-    /**
-    * Parse the event content to stdclass
-    *
-    * @return stdclass 'events data'
-    */
-    public function getEventsContent()
-    {
-        $eventsResponse = $this->getClientRequest();
-
-        if ($eventsResponse->getStatusCode()==200) {
-            $body = $eventsResponse->getBody(true);
-
-            $body = $eventsResponse->getBody(true);
-            
-            $bodyContents = $body->getContents();
-
-            return json_decode($bodyContents);
-        } else {
-            return $eventsResponse->getReasonPhrase();
-        }
-    }
-
-    /**
-    * Show the welcome page with lists of events
+    * Show the list of recent events 'today until 1 month from now'
     *
     * @return view
     */
-    public function welcome()
+    public function recentEvents()
     {
+        $linkedevent = new Linkedevent;
+        $linkedevent->clientUrl = $this->eventsClientUrl; 
+        $linkedevent->eventsDateRange = $this->eventsDateRange;
 
-        $events = $this->getEventsContent();
+        $events = $linkedevent->getEventsContent();
 
-        return view('events.index', compact('events'));
+        return view('events.recentevents', compact('events'));
     }
 
     /**
@@ -111,26 +79,13 @@ class LinkedeventsController extends Controller
     public function index()
     {
         
-        $events = $this->getEventsContent();
+        $linkedevent = new Linkedevent;
+        $linkedevent->clientUrl = $this->eventsClientUrl; 
+        $linkedevent->eventsDateRange = $this->eventsDateRange;
 
-        //assign carousel value
-        $carousel = [];
+        $events = $linkedevent->getEventsContent();   
 
-        foreach ($events->data as $key => $value) {
-
-            if (isset($value->image)) {
-
-                array_push($carousel, ($value));
-
-            }
-
-        }
-
-        if (count($carousel)>5) {
-            $carousel = array_slice($carousel, 0, 5); 
-        } else {
-            $carousel = array_slice($carousel, 0, count($carousel)); 
-        }
+        $carousel = $linkedevent->setEventsForCarousel($events, 5);
 
         return view('home', compact('carousel', 'events'));
     
@@ -143,9 +98,11 @@ class LinkedeventsController extends Controller
     */
     public function comingSoon()
     {
-        $this->eventsDateRange = $this->comingEventsDateRange;
+        $linkedevent = new Linkedevent;
+        $linkedevent->clientUrl = $this->eventsClientUrl; 
+        $linkedevent->eventsDateRange = $this->comingEventsDateRange;
 
-        $events = $this->getEventsContent();
+        $events = $linkedevent->getEventsContent(); 
 
         return view('events.comingsoon', compact('events'));
     }
@@ -157,9 +114,11 @@ class LinkedeventsController extends Controller
     */
     public function pastEvents()
     {
-        $this->eventsDateRange = $this->pastEventsDateRange;
+        $linkedevent = new Linkedevent;
+        $linkedevent->clientUrl = $this->eventsClientUrl; 
+        $linkedevent->eventsDateRange = $this->pastEventsDateRange;
 
-        $events = $this->getEventsContent();
+        $events = $linkedevent->getEventsContent();
 
         return view('events.pastevents', compact('events'));
     }
@@ -173,15 +132,14 @@ class LinkedeventsController extends Controller
     */
     public function showEvent(Request $request)
     {
-        $this->eventsClientUrl = array(
+        $linkedevent = new Linkedevent;
+        $linkedevent->clientUrl = array(
          'base_uri' => 'https://api.hel.fi/linkedevents/v1/event/'
             .$request->event.'/',
          'timeout'  => 2.0,
         );
-
-        $this->eventsDateRange = "";
-
-        $event = $this->getEventsContent();
+        
+        $event = $linkedevent->getEventsContent();
 
         return view('events.event', compact('event'));
     }
@@ -200,14 +158,17 @@ class LinkedeventsController extends Controller
         $linkedevent = $bookmark->checkEvent($request->listing_id);
 
         if (is_null($linkedevent)) {
-            //get event info and save it
-            $this->eventsClientUrl = array(
+            
+            $linkedevent = new Linkedevent;
+
+            $linkedevent->clientUrl = array(
              'base_uri' => 'https://api.hel.fi/linkedevents/v1/event/'
-                .$request->listing_id.'/',
-             'timeout'  => 2.0,
+                    .$request->listing_id.'/',
+                 'timeout'  => 2.0,
             );
-            $this->eventsDateRange = "";
-            $event = $this->getEventsContent();
+        
+            $event = $linkedevent->getEventsContent();
+
             $event->listing_id = $request->listing_id;
             
             $linkedevent = $bookmark->assignEventInfoAndSave($event);            
@@ -269,16 +230,10 @@ class LinkedeventsController extends Controller
     */
     public function showFavorites()
     {
-        $bookmark = new Bookmark;
+        $linkedevent = new Linkedevent;
 
-        $events = $bookmark->where('user_id', Auth::id())
-            ->where('action', 'favorite')
-            ->join(
-                'linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id'
-            )
-            ->join('users', 'users.id', '=', 'bookmarks.user_id')
-            ->orderBy('start_time', 'DESC')->get();
-        
+        $events = $linkedevent->fetchUsersFavoriteEvents();
+
         return view('events.favorites', compact('events'));    
     }
 
@@ -289,15 +244,9 @@ class LinkedeventsController extends Controller
     */
     public function showWishlists()
     {
-        $bookmark = new Bookmark;
+        $linkedevent = new Linkedevent;
 
-        $events = $bookmark->where('user_id', Auth::id())
-            ->where('action', 'wish')
-            ->join(
-                'linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id'
-            )
-            ->join('users', 'users.id', '=', 'bookmarks.user_id')
-            ->orderBy('start_time', 'DESC')->get();
+        $events = $linkedevent->fetchUsersWishLists();
         
         return view('events.wishlists', compact('events'));    
     }
@@ -309,15 +258,9 @@ class LinkedeventsController extends Controller
     */
     public function showWatched()
     {
-        $bookmark = new Bookmark;
+        $linkedevent = new Linkedevent;
 
-        $events = $bookmark->where('user_id', Auth::id())
-            ->where('action', 'watch')
-            ->join(
-                'linkedevents', 'linkedevents.id', '=', 'bookmarks.linkedevent_id'
-            )
-            ->join('users', 'users.id', '=', 'bookmarks.user_id')
-            ->orderBy('start_time', 'DESC')->get();
+        $events = $linkedevent->fetchUsersWatchLists();
         
         return view('events.watch', compact('events'));    
     }

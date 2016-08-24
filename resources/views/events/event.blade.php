@@ -26,7 +26,9 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-12 event-item-content">
                     @if(isset($event->name->fi))
-                       <h3>{{ $event->name->fi }}</h3>
+                        <h3>{{ $event->name->fi }}</h3>
+                    @else
+                        <h3>{{ $event->name->en }}</h3>
                     @endif
 
                     @if(isset($event->start_time))
@@ -43,7 +45,9 @@
 
                     <hr/>
 
-                    <input type="hidden" id="token" value="{{ csrf_token() }}">
+                    <!-- 
+                    <input type="hidden" id="token" value="{{ csrf_token() }}"> -->
+                    {{ csrf_field() }}
                     
                     <div class="btn-group event-social-button" id="bookmark-buttons" role="group" aria-label="...">
                         <button type="button" name="addToFavorites" class="btn btn-sm btn-default" id="favorite_{{ str_replace(':','_',$event->id) }}" {{ disableBookmarkButton('favorite', $event->id ) }}>
@@ -73,8 +77,10 @@
 
                     <hr/>
 
-                    @if(isset($event->description->fi))
+                    @if (isset($event->description->fi))
                         <p>{!! $event->description->fi !!}</p>
+                    @elseif (isset($event->description->en))
+                        <p>{!! $event->description->en !!}</p>
                     @else
                         <p><i>No event description.</i></p>
                     @endif

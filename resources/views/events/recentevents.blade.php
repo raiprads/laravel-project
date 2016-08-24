@@ -18,7 +18,7 @@
                 <div class="col-md-4 col-sm-6 col-xs-12">
 
                     <div class="col-md-12 event-item">
-
+                          
                         <div class="col-md-12 event-item-image">
                             @if(isset($value->image))
                                 <img src='{{ $value->image }}' class="img-responsive"/>
@@ -30,6 +30,8 @@
                         <div class="col-md-12 event-item-content">
                             @if(isset($value->name->fi))
                                <h3><a href="/events/{{ $value->id }}">{{ $value->name->fi }}</a></h3>
+                            @else
+                                <h3><a href="/events/{{ $value->id }}">{{ $value->name->en }}</a></h3>
                             @endif
 
                             @if(isset($value->start_time))
@@ -46,8 +48,10 @@
 
                             <hr/>
 
-                            @if(isset($value->short_description->fi))
+                            @if (isset($value->short_description->fi))
                                 <p>{{ strip_tags($value->short_description->fi) }}</p>
+                            @elseif (isset($value->short_description->en))
+                                <p>{{ strip_tags($value->short_description->en) }}</p>
                             @else
                                 <p><i>No event description.</i></p>
                             @endif
