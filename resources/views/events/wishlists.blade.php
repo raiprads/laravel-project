@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title'," | My Wishlists")
+
 @section('content')
 
 <div class="container">

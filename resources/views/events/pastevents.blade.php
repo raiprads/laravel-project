@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title'," | Past Events")
+
 @section('content')
 
 <div class="container">

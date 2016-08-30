@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@if(isset($event->name->fi))
+    @section('title'," | ".$event->name->fi)
+@else
+    @section('title'," | ".$event->name->en)
+@endif
+
 @section('content')
 
 <div class="container">

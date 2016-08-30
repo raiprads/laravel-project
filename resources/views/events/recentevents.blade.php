@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title'," | Latests Events")
+
 @section('content')
 
 <div class="container">
